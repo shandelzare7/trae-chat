@@ -11,20 +11,17 @@ st.set_page_config(page_title="Trae Chatbot", page_icon="🤖")
 st.title("🤖 Trae Chatbot (Python Edition)")
 
 # 设置 OpenAI API Key
-# 优先从环境变量获取，如果没有则在侧边栏输入
+# 优先从环境变量获取
 api_key = os.getenv("OPENAI_API_KEY")
 
-with st.sidebar:
-    st.markdown("## 配置")
-    if not api_key:
+# 只有当环境变量中没有 Key 时，才显示侧边栏配置
+if not api_key:
+    with st.sidebar:
+        st.markdown("## 配置")
         api_key = st.text_input("请输入 OpenAI API Key", type="password")
         if not api_key:
             st.warning("请输入 API Key 以开始对话")
-    else:
-        st.success("API Key 已配置")
-    
-    st.markdown("---")
-    st.markdown("这个 App 是使用 Python + Streamlit 构建的。")
+            st.stop()
 
 # 初始化聊天历史
 if "messages" not in st.session_state:
